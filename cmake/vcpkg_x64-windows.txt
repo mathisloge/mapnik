@@ -23,3 +23,4 @@ boost-regex
 boost-spirit
 boost-system
 boost-program-options
+qt5-base

@@ -38,8 +38,8 @@ jobs:
         uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
-          vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
-          vcpkgDirectory: '${{ github.workspace }}/deps/vcpkg'
+          vcpkgArguments: "@${{ env.VCPKGRESPONSEFILE }}"
+          vcpkgDirectory: "${{ github.workspace }}/deps/vcpkg"
           # Ensure the cache key changes any time the content of the response file changes.
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
 

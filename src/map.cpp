@@ -76,8 +76,7 @@ Map::Map()
     extra_params_(),
     font_directory_(),
     font_file_mapping_(),
-    font_memory_cache_(),
-    proj_cache_(std::make_unique<proj_transform_cache>()) {}
+    font_memory_cache_() {}
 
 Map::Map(int width,int height, std::string const& srs)
     : width_(width),
@@ -91,8 +90,7 @@ Map::Map(int width,int height, std::string const& srs)
       extra_params_(),
       font_directory_(),
       font_file_mapping_(),
-      font_memory_cache_(),
-      proj_cache_(std::make_unique<proj_transform_cache>()) {}
+      font_memory_cache_() {}
 
 Map::Map(Map const& rhs)
     : width_(rhs.width_),
@@ -114,8 +112,7 @@ Map::Map(Map const& rhs)
       font_directory_(rhs.font_directory_),
       font_file_mapping_(rhs.font_file_mapping_),
       // on copy discard memory caches
-      font_memory_cache_(),
-      proj_cache_(std::make_unique<proj_transform_cache>())
+      font_memory_cache_()
 {
     init_proj_transforms();
 }
@@ -140,8 +137,7 @@ Map::Map(Map && rhs)
       extra_params_(std::move(rhs.extra_params_)),
       font_directory_(std::move(rhs.font_directory_)),
       font_file_mapping_(std::move(rhs.font_file_mapping_)),
-      font_memory_cache_(std::move(rhs.font_memory_cache_)),
-      proj_cache_(std::move(rhs.proj_cache_)) {}
+      font_memory_cache_(std::move(rhs.font_memory_cache_)) {}
 
 Map::~Map() {}
 
@@ -539,7 +535,7 @@ void Map::zoom_all()
             if (layer.active())
             {
                 std::string const& layer_srs = layer.srs();
-                proj_transform const* proj_trans_ptr = proj_cache_->get(srs_, layer_srs);;
+                proj_transform const* proj_trans_ptr = proj_transform_cache::get(srs_, layer_srs);;
                 box2d<double> layer_ext = layer.envelope();
                 if (proj_trans_ptr->backward(layer_ext, PROJ_ENVELOPE_POINTS))
                 {
@@ -719,7 +715,7 @@ featureset_ptr Map::query_point(unsigned index, double x, double y) const
         mapnik::datasource_ptr ds = layer.datasource();
         if (ds)
         {
-            proj_transform const* proj_trans_ptr = proj_cache_->get(layer.srs(), srs_);
+            proj_transform const* proj_trans_ptr = proj_transform_cache::get(layer.srs(), srs_);
             double z = 0;
             if (!proj_trans_ptr->equal() && !proj_trans_ptr->backward(x,y,z))
             {
@@ -784,12 +780,12 @@ void Map::set_extra_parameters(parameters& params)
 
 mapnik::proj_transform const* Map::get_proj_transform(std::string const& source, std::string const& dest) const
 {
-    return proj_cache_->get(source, dest);
+    return proj_transform_cache::get(source, dest);
 }
 
 void Map::init_proj_transform(std::string const& source, std::string const& dest)
 {
-    proj_cache_->init(source, dest);
+    proj_transform_cache::init(source, dest);
 }
 
 void Map::init_proj_transforms()

@@ -67,8 +67,8 @@ struct proj_transform_cache : util::noncopyable
     proj_transform_cache() = default;
 
     thread_local static cache_type cache_;
-    void init(std::string const& source, std::string const& dest) const;
-    proj_transform const* get(std::string const& source, std::string const& dest) const;
+    static void init(std::string const& source, std::string const& dest);
+    static proj_transform const* get(std::string const& source, std::string const& dest);
 };
 
 }

@@ -26,7 +26,7 @@ namespace mapnik {
 
 thread_local proj_transform_cache::cache_type proj_transform_cache::cache_ = cache_type();
 
-void proj_transform_cache::init(std::string const& source, std::string const& dest) const
+void proj_transform_cache::init(std::string const& source, std::string const& dest)
 {
     compatible_key_type key = std::make_pair<boost::string_view, boost::string_view>(source, dest);
     auto itr = cache_.find(key, compatible_hash{}, compatible_predicate{});
@@ -39,7 +39,7 @@ void proj_transform_cache::init(std::string const& source, std::string const& de
     }
 }
 
-proj_transform const* proj_transform_cache::get(std::string const& source, std::string const& dest) const
+proj_transform const* proj_transform_cache::get(std::string const& source, std::string const& dest)
 {
 
     compatible_key_type key = std::make_pair<boost::string_view, boost::string_view>(source, dest);
